@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
     private UIHandler handler;
     private ClockTask clockTask;
 
+    private LinkedList<HashMap<String,String>> data;
+    private SimpleAdapter adapter;
+    private String[] from = {"text"};
+    private int[] to = {R.id.item_text};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +39,16 @@ public class MainActivity extends AppCompatActivity {
         left = findViewById(R.id.left_btn);
         right = findViewById(R.id.right_btn);
         list = findViewById(R.id.list);
+        initListView();
 
         timer = new Timer();
         handler = new UIHandler();
+    }
+
+    private void initListView(){
+        data = new LinkedList<>();
+        adapter = new SimpleAdapter(this, data,R.layout.item,from,to);
+        list.setAdapter(adapter);
     }
 
     public void doLeft(View view){
@@ -45,7 +60,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doLap(){
-
+        HashMap<String,String> lap = new HashMap<>();
+        lap.put(from[0], "" + i);
+        data.add(0, lap);
+        adapter.notifyDataSetChanged();
     }
 
     private void doReset(){
@@ -53,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
         //clock.setText("0");
         handler.sendEmptyMessage(0);
+
+        data.clear();
+        adapter.notifyDataSetChanged();
     }
 
     public void doRight(View view){
