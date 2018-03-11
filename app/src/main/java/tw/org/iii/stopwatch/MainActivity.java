@@ -37,7 +37,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void doLeft(View view){
+        if (isStart){
+            doLap();
+        }else{
+            doReset();
+        }
+    }
 
+    private void doLap(){
+
+    }
+
+    private void doReset(){
+        i = 0;
+
+        //clock.setText("0");
+        handler.sendEmptyMessage(0);
     }
 
     public void doRight(View view){
